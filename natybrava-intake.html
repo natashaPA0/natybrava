@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>𓆏 Work With Naty Brava</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,600&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --cream: #faf6ee;
+    --gold: #c8922a;
+    --gold-light: #e8c068;
+    --moss: #3d5a3e;
+    --terracotta: #b85c38;
+    --sand: #e8dfc8;
+    --mist: #f2ede3;
+    --frog: #4a7c59;
+    --accent: #8b4513;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Textured background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      radial-gradient(ellipse at 20% 10%, rgba(200,146,42,0.07) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 90%, rgba(61,90,62,0.06) 0%, transparent 50%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.025'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 60px 32px 100px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.1s;
+  }
+
+  .frog-glyph {
+    font-size: 52px;
+    display: block;
+    margin-bottom: 16px;
+    filter: drop-shadow(0 2px 8px rgba(200,146,42,0.3));
+    animation: float 4s ease-in-out infinite 1s;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-6px); }
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 em {
+    color: var(--gold);
+    font-style: italic;
+  }
+
+  .header-subtitle {
+    font-size: 15px;
+    color: #6b5e4a;
+    font-weight: 300;
+    max-width: 420px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 32px 0;
+  }
+
+  .divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold-light), transparent);
+  }
+
+  .divider-glyph {
+    color: var(--gold);
+    font-size: 18px;
+    opacity: 0.7;
+  }
+
+  /* Cards */
+  .cards-intro {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 18px;
+    text-align: center;
+    color: var(--accent);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 0.3s;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .card {
+    background: rgba(255,255,255,0.7);
+    border: 1.5px solid rgba(200,146,42,0.2);
+    border-radius: 16px;
+    padding: 24px 28px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.7s ease forwards;
+    backdrop-filter: blur(4px);
+  }
+
+  .card:nth-child(1) { animation-delay: 0.4s; }
+  .card:nth-child(2) { animation-delay: 0.5s; }
+  .card:nth-child(3) { animation-delay: 0.6s; }
+  .card:nth-child(4) { animation-delay: 0.7s; }
+  .card:nth-child(5) { animation-delay: 0.8s; }
+  .card:nth-child(6) { animation-delay: 0.9s; }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,146,42,0.06), transparent);
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+
+  .card:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(200,146,42,0.15);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-emoji {
+    font-size: 28px;
+    min-width: 40px;
+    text-align: center;
+    line-height: 1;
+    margin-top: 2px;
+  }
+
+  .card-content { flex: 1; }
+
+  .card-label {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 17px;
+    color: var(--ink);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: var(--sand);
+    color: var(--accent);
+  }
+
+  .card-tag.paid { background: rgba(200,146,42,0.15); color: var(--gold); }
+  .card-tag.free { background: rgba(61,90,62,0.12); color: var(--moss); }
+
+  .card-desc {
+    font-size: 14px;
+    color: #6b5e4a;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  .card-arrow {
+    color: var(--gold);
+    font-size: 20px;
+    opacity: 0;
+    transition: all 0.2s ease;
+    align-self: center;
+    margin-left: 8px;
+  }
+
+  .card:hover .card-arrow { opacity: 1; transform: translateX(4px); }
+
+  /* Panel overlay */
+  .panel-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(26,18,8,0.5);
+    z-index: 100;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.2s ease;
+  }
+
+  .panel-backdrop.open { display: block; }
+
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .panel {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--cream);
+    border-radius: 28px 28px 0 0;
+    padding: 40px 32px 52px;
+    z-index: 101;
+    max-width: 680px;
+    margin: 0 auto;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .panel.open {
+    transform: translateY(0);
+  }
+
+  .panel-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--sand);
+    border-radius: 2px;
+    margin: 0 auto 28px;
+  }
+
+  .panel-close {
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    background: none;
+    border: none;
+    font-size: 22px;
+    color: #9b8c78;
+    cursor: pointer;
+    padding: 4px;
+    transition: color 0.2s;
+  }
+
+  .panel-close:hover { color: var(--ink); }
+
+  .panel-emoji { font-size: 36px; margin-bottom: 12px; display: block; }
+
+  .panel h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .panel-tagline {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    color: var(--gold);
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .panel-body {
+    font-size: 15px;
+    color: #4a3f30;
+    line-height: 1.75;
+    margin-bottom: 24px;
+  }
+
+  .panel-body strong { color: var(--ink); font-weight: 500; }
+
+  .panel-details {
+    background: var(--mist);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 12px 12px 0;
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    font-size: 14px;
+    color: #5a4a38;
+  }
+
+  .panel-details p { margin-bottom: 6px; }
+  .panel-details p:last-child { margin-bottom: 0; }
+  .panel-details strong { color: var(--gold); }
+
+  .panel-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: var(--cream);
+    text-decoration: none;
+    padding: 16px 32px;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    letter-spacing: 0.02em;
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    border: none;
+  }
+
+  .panel-cta:hover {
+    background: var(--gold);
+    color: var(--ink);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(200,146,42,0.35);
+  }
+
+  .panel-cta-secondary {
+    display: block;
+    text-align: center;
+    margin-top: 14px;
+    font-size: 13px;
+    color: #9b8c78;
+    text-decoration: none;
+  }
+
+  .panel-cta-secondary:hover { color: var(--gold); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.1s;
+  }
+
+  .footer-note {
+    font-size: 13px;
+    color: #9b8c78;
+    line-height: 1.8;
+  }
+
+  .footer-note a {
+    color: var(--gold);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(200,146,42,0.3);
+    transition: border-color 0.2s;
+  }
+
+  .footer-note a:hover { border-color: var(--gold); }
+
+  .substack-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    background: var(--frog);
+    color: white;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 50px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+  }
+
+  .substack-link:hover {
+    background: var(--moss);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(74,124,89,0.3);
+  }
+
+  /* RSS Feed */
+  .rss-section {
+    margin-top: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease forwards 1.2s;
+  }
+
+  .rss-heading {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--accent);
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .rss-posts {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .rss-post {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(200,146,42,0.15);
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-decoration: none;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+  }
+
+  .rss-post:hover {
+    border-color: var(--gold-light);
+    background: rgba(255,255,255,0.8);
+    transform: translateX(4px);
+  }
+
+  .rss-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold);
+    margin-top: 7px;
+    flex-shrink: 0;
+    opacity: 0.7;
+  }
+
+  .rss-post-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--ink);
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+
+  .rss-post-date {
+    font-size: 12px;
+    color: #9b8c78;
+    font-weight: 300;
+  }
+
+  .rss-loading {
+    text-align: center;
+    font-size: 13px;
+    color: #9b8c78;
+    padding: 16px;
+    font-style: italic;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Responsive */
+  @media (max-width: 480px) {
+    .container { padding: 40px 20px 80px; }
+    .card { padding: 20px; gap: 14px; }
+    .panel { padding: 32px 20px 44px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="header">
+    <span class="frog-glyph">𓆏</span>
+    <h1>So you want to<br><em>work with Naty.</em></h1>
+    <p class="header-subtitle">Wonderful. Let's make sure we're both set up for success — starting with what kind of engagement actually fits what you need.</p>
+  </header>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <span class="divider-glyph">𓆏</span>
+    <div class="divider-line"></div>
+  </div>
+
+  <p class="cards-intro">What brings you here today?</p>
+
+  <div class="cards">
+
+    <div class="card" onclick="openPanel('brainpick')">
+      <div class="card-emoji">🧠</div>
+      <div class="card-content">
+        <div class="card-label">
+          The Brain Pick
+          <span class="card-tag paid">Paid</span>
+        </div>
+        <p class="card-desc">You have a specific question, challenge, or decision — and you want to think it through with someone who has seen this from four continents.</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <div class="card" onclick="openPanel('advisory')">
+      <div class="card-emoji">📝</div>
+      <div class="card-content">
+        <div class="card-label">
+          The Advisory Brief
+          <span class="card-tag paid">Paid</span>
+        </div>
+        <p class="card-desc">You need a written response to a specific question — strategic, analytical, or framing. Async. No meeting required.</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <div class="card" onclick="openPanel('speaking')">
+      <div class="card-emoji">🎤</div>
+      <div class="card-content">
+        <div class="card-label">
+          Speaking & Moderation
+          <span class="card-tag paid">Paid</span>
+        </div>
+        <p class="card-desc">You want Naty on a stage, panel, or in the chair. Keynotes, fireside chats, moderation, and summit facilitation.</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <div class="card" onclick="openPanel('board')">
+      <div class="card-emoji">🏛️</div>
+      <div class="card-content">
+        <div class="card-label">
+          Board & Advisory Roles
+          <span class="card-tag paid">Paid</span>
+        </div>
+        <p class="card-desc">You want sustained access to expertise — governance, advisory committees, ongoing strategic counsel. Let's talk structure.</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <div class="card" onclick="openPanel('collab')">
+      <div class="card-emoji">🫱🏽‍🫲🏽</div>
+      <div class="card-content">
+        <div class="card-label">
+          Collaboration Proposal
+          <span class="card-tag">Project-based</span>
+        </div>
+        <p class="card-desc">You have a project with real structure — timeline, budget, defined outcomes — and you're looking for a co-creator, not free input.</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+    <div class="card" onclick="openPanel('orbit')">
+      <div class="card-emoji">𓆏</div>
+      <div class="card-content">
+        <div class="card-label">
+          Stay in the Orbit
+          <span class="card-tag free">Free</span>
+        </div>
+        <p class="card-desc">Not ready to engage formally but don't want to lose the thread? The Substack is where the thinking lives.</p>
+      </div>
+      <span class="card-arrow">→</span>
+    </div>
+
+  </div>
+
+  <div class="rss-section">
+    <p class="rss-heading">Recent thinking from Adaptive Leap™</p>
+    <div class="rss-posts" id="rss-posts">
+      <div class="rss-loading">Loading latest posts…</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <p class="footer-note">
+      Naty works with decision-makers navigating the AI era — across governance, investment, and the places big decisions actually land.<br>
+      Based between Paris and East Africa. Operating at the intersection of AI, ethics, and what actually works.
+    </p>
+    <a href="https://natybrava.substack.com" target="_blank" class="substack-link">
+      𓆏 Read Adaptive Leap™ on Substack
+    </a>
+  </div>
+
+</div>
+
+<!-- Panel backdrop -->
+<div class="panel-backdrop" id="backdrop" onclick="closePanel()"></div>
+
+<!-- Panels -->
+<div class="panel" id="panel">
+  <div class="panel-handle"></div>
+  <button class="panel-close" onclick="closePanel()">✕</button>
+  <div id="panel-content"></div>
+</div>
+
+<script>
+const TALLY_BASE = 'https://tally.so/r/XXXXXXXX'; // 👈 replace with your Tally form ID after step 4 below
+
+const panels = {
+  brainpick: {
+    emoji: '🧠',
+    title: 'The Brain Pick',
+    tagline: '"Just 15 minutes" is doing a lot of work there.',
+    body: `You have a question that deserves a real answer. The kind that comes from someone who has sat in policy rooms across four continents, worked at the intersection of AI governance and investment, and can also help you think through what the AI era means for your career, your identity, and your next move.<br><br>This is a <strong>structured 1:1 consultation</strong> — not a catch-up, not a favour. You come with a clear question or challenge; Naty comes prepared. You leave with something you can actually use.`,
+    details: `<p><strong>Format:</strong> 30 or 60 minutes via video call</p>
+              <p><strong>Turnaround:</strong> Bookable within 5–7 business days</p>
+              <p><strong>Best for:</strong> Strategy questions, AI governance framing, research direction, investment decisions, career pivots and uncareer transitions, positioning in the AI era</p>
+              <p><strong>Note:</strong> A short intake form (4 questions) confirms scope before booking. This protects your time and Naty's.</p>`,
+    cta: 'Complete the Intake Form',
+    ctaHref: TALLY_BASE + '?type=brainpick',
+    ctaNote: 'Takes 2 minutes. You\'ll be redirected to Calendly after submission.'
+  },
+  advisory: {
+    emoji: '📝',
+    title: 'The Advisory Brief',
+    tagline: 'You need thinking, not a meeting.',
+    body: `Some questions don't need a call — they need a clear, considered written response from someone with the right vantage point. An Advisory Brief is <strong>an async written consultation</strong>: you submit a specific question or scenario, and Naty delivers a structured written response within an agreed timeframe.<br><br>Ideal if you're across time zones, if you need something you can share internally, or if you simply process better in writing.`,
+    details: `<p><strong>Format:</strong> Written response, 500–1200 words depending on scope</p>
+              <p><strong>Turnaround:</strong> 5–7 business days from confirmed scope</p>
+              <p><strong>Best for:</strong> Framing memos, position-taking, stakeholder briefings, ethics frameworks, comparative analysis</p>
+              <p><strong>Not for:</strong> Open-ended questions with no clear output in mind</p>`,
+    cta: 'Request an Advisory Brief',
+    ctaHref: TALLY_BASE + '?type=advisory',
+    ctaNote: 'Scope and fee confirmed before work begins. Always.'
+  },
+  speaking: {
+    emoji: '🎤',
+    title: 'Speaking & Moderation',
+    tagline: 'A speaker fee is not a negotiating position.',
+    body: `Naty speaks on AI governance, comparative ethics, technology and identity, and what the AI era looks like from the Global Majority — not as a talking point, but as lived expertise from four continents.<br><br>She also moderates. The kind where the room actually moves somewhere. Keynotes, fireside chats, panels, summit facilitation — in English and French.`,
+    details: `<p><strong>Formats:</strong> Keynote, fireside chat, panel, moderation, summit facilitation</p>
+              <p><strong>Topics:</strong> AI governance & policy, compute equity, AI ethics (CST, Islamic, African frameworks), technology & identity, the leap experience, AI and the future of work</p>
+              <p><strong>Languages:</strong> English, French</p>
+              <p><strong>Includes:</strong> Preparation time, pre-event coordination, and full travel costs</p>
+              <p><strong>Note:</strong> Exposure is not a line item. Neither is "the honour of being included."</p>`,
+    cta: 'Send a Speaking Enquiry',
+    ctaHref: TALLY_BASE + '?type=speaking',
+    ctaNote: 'All enquiries responded to within 5 business days.'
+  },
+  board: {
+    emoji: '🏛️',
+    title: 'Board & Advisory Roles',
+    tagline: 'Governance labor is labor.',
+    body: `Sustained access to expertise requires a sustained agreement. Naty advises on AI strategy, responsible investment, compute governance, and technology ethics — and she does this through <strong>structured, compensated arrangements</strong> with clear scope, term, and deliverables.<br><br>If your board or advisory committee is currently "compensated through the honor of serving" — this form is still the right place to start. Restructure first, then let's talk.`,
+    details: `<p><strong>Areas:</strong> AI governance, responsible investment, comparative ethics, technology policy, EAC & Gulf market intelligence</p>
+              <p><strong>Structure:</strong> Retainer or per-meeting fee; minimum 6-month terms preferred</p>
+              <p><strong>Not available for:</strong> Unpaid advisory roles, "advisory board" listings with no defined engagement, or equity-only arrangements at pre-revenue stage</p>`,
+    cta: 'Submit a Board/Advisory Enquiry',
+    ctaHref: TALLY_BASE + '?type=board',
+    ctaNote: 'Please have your organisation name, role scope, and compensation structure ready.'
+  },
+  collab: {
+    emoji: '🫱🏽‍🫲🏽',
+    title: 'Collaboration Proposal',
+    tagline: 'Co-creation is not free R&D.',
+    body: `A real collaboration has a timeline, a budget, defined outputs, and mutual accountability. If you have a project in that shape — research partnerships, co-authored work, joint programme development, podcast or editorial collaborations — Naty is genuinely interested.<br><br>If you don't have those answers yet, that's useful information. It might mean the project needs more structure before it's ready for a collaborator.`,
+    details: `<p><strong>Types considered:</strong> Research partnerships, co-authored publications, joint advisory or programme design, podcast collaboration, co-facilitated workshops</p>
+              <p><strong>What to have ready:</strong> Project scope, your role, timeline, and budget or compensation structure</p>
+              <p><strong>Response time:</strong> 7–10 business days</p>`,
+    cta: 'Submit a Collaboration Proposal',
+    ctaHref: TALLY_BASE + '?type=collab',
+    ctaNote: 'Proposals without defined scope or budget may not receive a response.'
+  },
+  orbit: {
+    emoji: '𓆏',
+    title: 'Stay in the Orbit',
+    tagline: 'The thinking is free. The time is not.',
+    body: `Not every engagement needs to be formal — and <em>Adaptive Leap™</em> is genuinely where the thinking lives. AI and innovation through the lens of faith, identity, the Global Majority, and what it actually means to leap forward when the ground keeps shifting.<br><br><strong>Free subscribers</strong> get the essays, notes, and selected long reads — including cross-market takes on what's happening in prepaid economies, AI and relationships, and the uncareer.<br><br><strong>Paid subscribers</strong> get the deeper cuts: audio deep dives, strategy frameworks, cross-market intelligence, and the community that forms around it.`,
+    details: `<p><strong>Free tier:</strong> Essays, Substack Notes, selected long reads</p>
+              <p><strong>Paid tier:</strong> Audio deep dives, strategy decks, frameworks, AI + identity series, community</p>
+              <p><strong>Languages:</strong> English and French</p>
+              <p><strong>Published from:</strong> Paris & East Africa</p>`,
+    cta: 'Subscribe to Adaptive Leap™',
+    ctaHref: 'https://natybrava.substack.com/subscribe',
+    ctaNote: 'No pitch. No upsell. Just the work.'
+  }
+};
+
+function openPanel(id) {
+  const data = panels[id];
+  const content = document.getElementById('panel-content');
+
+  content.innerHTML = `
+    <span class="panel-emoji">${data.emoji}</span>
+    <h2>${data.title}</h2>
+    <p class="panel-tagline">${data.tagline}</p>
+    <div class="panel-body">${data.body}</div>
+    <div class="panel-details">${data.details}</div>
+    <a href="${data.ctaHref}" target="_blank" class="panel-cta">${data.cta} →</a>
+    ${data.ctaNote ? `<span class="panel-cta-secondary">${data.ctaNote}</span>` : ''}
+  `;
+
+  document.getElementById('backdrop').classList.add('open');
+  document.getElementById('panel').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closePanel() {
+  document.getElementById('backdrop').classList.remove('open');
+  document.getElementById('panel').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePanel();
+});
+
+// RSS Feed
+async function loadRSS() {
+  const container = document.getElementById('rss-posts');
+  try {
+    const rss = `https://natybrava.substack.com/feed`;
+    const api = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rss)}&count=4`;
+    const res = await fetch(api);
+    const data = await res.json();
+    if (!data.items || !data.items.length) throw new Error('no items');
+    container.innerHTML = data.items.map(item => {
+      const date = new Date(item.pubDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      return `<a href="${item.link}" target="_blank" class="rss-post">
+        <div class="rss-dot"></div>
+        <div>
+          <div class="rss-post-title">${item.title}</div>
+          <div class="rss-post-date">${date}</div>
+        </div>
+      </a>`;
+    }).join('');
+  } catch(e) {
+    container.innerHTML = `<div class="rss-loading"><a href="https://natybrava.substack.com/archive" target="_blank" style="color:var(--gold);text-decoration:none;">Browse the full archive →</a></div>`;
+  }
+}
+loadRSS();
+</script>
+</body>
+</html>
